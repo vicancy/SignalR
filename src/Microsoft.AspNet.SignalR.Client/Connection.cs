@@ -561,14 +561,14 @@ namespace Microsoft.AspNet.SignalR.Client
                                  // NOTE: We have tests that rely on this state change occuring *BEFORE* the start task is complete
                                  ChangeState(ConnectionState.Connecting, ConnectionState.Connected);
 
-                                 // Now that we're connected complete the start task that the
-                                 // receive queue is waiting on
-                                 _startTcs.TrySetResult(null);
-
                                  // Start the monitor to check for server activity
                                  _lastMessageAt = DateTime.UtcNow;
                                  _lastActiveAt = DateTime.UtcNow;
                                  Monitor.Start();
+
+                                 // Now that we're connected complete the start task that the
+                                 // receive queue is waiting on
+                                 _startTcs.TrySetResult(null);
                              })
                              // Don't return until the last receive has been processed to ensure messages/state sent in OnConnected
                              // are processed prior to the Start() method task finishing
